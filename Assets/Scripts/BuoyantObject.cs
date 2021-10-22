@@ -32,22 +32,34 @@ public class BuoyantObject : MonoBehaviour
         //for every vertex in the mesh
         foreach (Vector3 vertex in filter.mesh.vertices)
         {
+
             //convert local to global position
             Vector3 vt = transform.TransformPoint(vertex);
-            float d = vt.y - WaveGenerator.Instance.SampleWaveHeight(vt.x);
 
+            /* GERSTNER WAVES */
+
+            float d = vt.y - WaveGenerator.Instance.SampleGerstnerHeight(vt.x);
+            if(d < 0f)
+                rb.AddForceAtPosition(-d * Vector3.up *
+                                      WaveGenerator.Instance.strength,
+                                      vt, ForceMode.Acceleration);
+            //apply gravity
+            rb.AddForceAtPosition(gravity, vt, ForceMode.Acceleration);
+
+
+
+            /* SINE WAVES
+             
+            float d = vt.y - WaveGenerator.Instance.SampleWaveHeight(vt.x);
             //if immersed, apply upward force
             if (d < 0f)
                 rb.AddForceAtPosition(-d * WaveGenerator.Instance.SampleNormal(vt.x) * 
                                       WaveGenerator.Instance.strength,
                                       vt, ForceMode.Acceleration);
 
-                //rb.AddForceAtPosition(-d * transform.up * 
-                                      //WaveGenerator.Instance.strength,
-                                      //vt, ForceMode.Acceleration);
-
             //apply gravity
             rb.AddForceAtPosition(gravity, vt, ForceMode.Acceleration);
+            */
         }
     }
 }

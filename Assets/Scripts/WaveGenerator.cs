@@ -70,11 +70,43 @@ public class WaveGenerator : MonoBehaviour
         return Mathf.Sin(k * (x - speed * Time.time)) * amplitude;
     }
 
+    /// <summary>
+    /// using wave equation 1
+    /// n(x) = (1, -f'(x))
+    /// </summary>
+    /// <param name="x">the x value</param>
+    /// <returns>the normal vector</returns>
     public Vector3 SampleNormal(float x)
     {
+        /* SINE WAVE IMPLEMENTATION (PROTOTYPE 1) */
+        //k, the wavenumber
         float k = 2 * Mathf.PI / wavelength;
-        float y = amplitude * Mathf.Cos(k * (x - speed * Time.time));
-        Vector3 n = new Vector3(-y, 1, 0);
-        return n.normalized;
+
+        //xr, our input value for the function P(x, y)
+        float xr = k * (x - speed * Time.time);
+
+        //y, the output value (height)
+        float y = k * amplitude * Mathf.Cos(xr);
+
+        //normal vector with unit length 1
+        Vector3 normal = new Vector3(-y, 1, 0);
+        return normal.normalized;
+    }
+
+    public float SampleGerstnerHeight(float x)
+    {
+        /* GERSTNER WAVE IMPLEMENTATION */
+        //k, the wavenumber
+        float k = 2 * Mathf.PI / wavelength;
+
+        //j = k(x - ct)
+        float j = k * (x - speed * Time.time);
+
+        //P(x, y), the output vector
+        float y1 = amplitude * Mathf.Sin(j);
+        float x1 = x + amplitude * Mathf.Cos(j);
+
+        return y1;
+        //now the Newton-Raphson method has to be used to approximate the root
     }
 }

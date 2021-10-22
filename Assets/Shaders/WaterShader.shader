@@ -51,8 +51,18 @@ Shader "Custom/WaterShader"
 
             //wave number
             float k = 2 * UNITY_PI / _Wavelength;
-            v.y = _Amplitude * sin(k * (v.x - _Speed * _Time.y));
+            float x = k * (v.x - _Speed * _Time.y);
+            v.x += _Amplitude * cos(x);
+            v.y = _Amplitude * sin(x);
+
+            //tangent = (dx, dy, dz)
+            //float3 tangent = float3(1, k * _Amplitude * cos(x), 0);
+
+            //normal = (-dy, dx, 0)
+            //float3 normal = normalize(float3(-tangent.y, tangent.x, 0));
+
             vertexData.vertex.xyz = v;
+            //vertexData.normal = normal;
 
         }
 

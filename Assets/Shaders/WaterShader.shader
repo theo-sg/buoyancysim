@@ -56,13 +56,13 @@ Shader "Custom/WaterShader"
             v.y = _Amplitude * sin(x);
 
             //tangent = (dx, dy, dz)
-            //float3 tangent = float3(1, k * _Amplitude * cos(x), 0);
+            float3 tangent = normalize(float3(1, k * _Amplitude * cos(x), 0));
 
             //normal = (-dy, dx, 0)
-            //float3 normal = normalize(float3(-tangent.y, tangent.x, 0));
+            float3 normal = float3(-tangent.y, tangent.x, 0);
 
             vertexData.vertex.xyz = v;
-            //vertexData.normal = normal;
+            vertexData.normal = normal;
 
         }
 

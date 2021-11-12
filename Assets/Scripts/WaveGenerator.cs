@@ -95,7 +95,7 @@ public class WaveGenerator : MonoBehaviour
 
     public float SampleGerstnerHeight(float x)
     {
-        /* GERSTNER WAVE IMPLEMENTATION */
+        /* GERSTNER WAVE IMPLEMENTATION 
         //k, the wavenumber
         float k = 2 * Mathf.PI / wavelength;
 
@@ -106,7 +106,52 @@ public class WaveGenerator : MonoBehaviour
         float y1 = amplitude * Mathf.Sin(j);
         float x1 = x + amplitude * Mathf.Cos(j);
 
-        return y1;
+        return y1;*/
         //now the Newton-Raphson method has to be used to approximate the root
+
+
+        /* GERSTNER WAVE IMPLEMENTATION */
+        //k, the wavenumber
+        float k = 2 * Mathf.PI / wavelength;
+
+        //j = k(x - ct)
+        float j = k * (x - speed * Time.time);
+
+
+        //round 1
+        float x1 = x + amplitude * Mathf.Cos(j);
+        float x2 = 2 * x - x1;
+
+        float j2 = k * (x2 - speed * Time.time);
+        float y3 = amplitude * Mathf.Sin(j2);
+
+        return y3;
+    }
+
+    //GERSTNER TEST
+    public Vector3 SampleGerstnerNormal(float x)
+    {
+        /* GERSTNER WAVE IMPLEMENTATION */
+        //k, the wavenumber
+        float k = 2 * Mathf.PI / wavelength;
+
+        //j = k(x - ct)
+        float j = k * (x - speed * Time.time);
+
+        //resulting point
+        float x1 = x + amplitude * Mathf.Cos(j);
+
+        //find new approximation
+        float x2 = 2 * x - x1;
+
+        //find new j
+        j = k * (x2 - speed * Time.time);
+
+        //find gradient
+        float dx = 1 - k * amplitude * Mathf.Sin(j);
+        float dy = k * amplitude * Mathf.Cos(j);
+
+        //normal
+        return new Vector3(-dy, dx, 0).normalized;
     }
 }

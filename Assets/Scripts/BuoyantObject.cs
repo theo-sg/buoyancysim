@@ -16,6 +16,15 @@ public class BuoyantObject : MonoBehaviour
         rb = GetComponent<Rigidbody>(); 
     }
 
+    void Start()
+    {
+        //add new vertices
+        //go through each triangle
+        //find average of each vertex
+        //add this new vertex back to the mesh
+        //for(int i)
+    }
+
     public void Update()
     {
         ApplyBuoyancy();
@@ -40,16 +49,15 @@ public class BuoyantObject : MonoBehaviour
 
             float d = vt.y - WaveGenerator.Instance.SampleGerstnerHeight(vt.x);
             if(d < 0f)
-                rb.AddForceAtPosition(-d * Vector3.up *
+                rb.AddForceAtPosition(-d * WaveGenerator.Instance.SampleGerstnerNormal(vt.x) *
                                       WaveGenerator.Instance.strength,
                                       vt, ForceMode.Acceleration);
             //apply gravity
             rb.AddForceAtPosition(gravity, vt, ForceMode.Acceleration);
 
 
-
-            /* SINE WAVES
-             
+            /* SINE WAVES */            
+            /*
             float d = vt.y - WaveGenerator.Instance.SampleWaveHeight(vt.x);
             //if immersed, apply upward force
             if (d < 0f)

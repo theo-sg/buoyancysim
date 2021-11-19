@@ -1,0 +1,52 @@
+{
+    "name": "Controls",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "1c94a705-bf4b-442b-92d0-4b24865bf73c",
+            "actions": [
+                {
+                    "name": "LMB",
+                    "type": "Button",
+                    "id": "04e7ccfe-5e57-4a18-9462-3c02b1a93df4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MMB",
+                    "type": "Button",
+                    "id": "771b7db5-b0de-4779-b655-b37406f9bfc4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5a12c033-865d-4cbc-ab99-373dcff153a7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "503b3fa8-f1bc-4102-8e17-044c2aefa9ab",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MMB",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

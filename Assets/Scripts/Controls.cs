@@ -33,6 +33,22 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""bdc71f4f-03ed-4e2a-b74e-18c29addfe18"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""F"",
+                    ""type"": ""Button"",
+                    ""id"": ""00a94ae2-38c2-4caf-b0ee-4cd9b3af0dee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -57,6 +73,28 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""MMB"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""205665a4-eea5-4288-879f-61be4e216b8e"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d19f0d80-4169-47de-b8b7-f04534d60942"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""F"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -67,6 +105,8 @@ public class @Controls : IInputActionCollection, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_LMB = m_Camera.FindAction("LMB", throwIfNotFound: true);
         m_Camera_MMB = m_Camera.FindAction("MMB", throwIfNotFound: true);
+        m_Camera_Scroll = m_Camera.FindAction("Scroll", throwIfNotFound: true);
+        m_Camera_F = m_Camera.FindAction("F", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -118,12 +158,16 @@ public class @Controls : IInputActionCollection, IDisposable
     private ICameraActions m_CameraActionsCallbackInterface;
     private readonly InputAction m_Camera_LMB;
     private readonly InputAction m_Camera_MMB;
+    private readonly InputAction m_Camera_Scroll;
+    private readonly InputAction m_Camera_F;
     public struct CameraActions
     {
         private @Controls m_Wrapper;
         public CameraActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @LMB => m_Wrapper.m_Camera_LMB;
         public InputAction @MMB => m_Wrapper.m_Camera_MMB;
+        public InputAction @Scroll => m_Wrapper.m_Camera_Scroll;
+        public InputAction @F => m_Wrapper.m_Camera_F;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -139,6 +183,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @MMB.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnMMB;
                 @MMB.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnMMB;
                 @MMB.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnMMB;
+                @Scroll.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
+                @Scroll.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
+                @Scroll.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnScroll;
+                @F.started -= m_Wrapper.m_CameraActionsCallbackInterface.OnF;
+                @F.performed -= m_Wrapper.m_CameraActionsCallbackInterface.OnF;
+                @F.canceled -= m_Wrapper.m_CameraActionsCallbackInterface.OnF;
             }
             m_Wrapper.m_CameraActionsCallbackInterface = instance;
             if (instance != null)
@@ -149,6 +199,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @MMB.started += instance.OnMMB;
                 @MMB.performed += instance.OnMMB;
                 @MMB.canceled += instance.OnMMB;
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
+                @F.started += instance.OnF;
+                @F.performed += instance.OnF;
+                @F.canceled += instance.OnF;
             }
         }
     }
@@ -157,5 +213,7 @@ public class @Controls : IInputActionCollection, IDisposable
     {
         void OnLMB(InputAction.CallbackContext context);
         void OnMMB(InputAction.CallbackContext context);
+        void OnScroll(InputAction.CallbackContext context);
+        void OnF(InputAction.CallbackContext context);
     }
 }

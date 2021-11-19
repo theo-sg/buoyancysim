@@ -18,7 +18,11 @@ public class CameraController : MonoBehaviour
     public CameraState currentState;
 
     float sensitivity = 0.6f;
+    float distance = 3f;
+    
     bool MMB = false;
+
+    Vector2 turnXY = new Vector2(0, 0);
 
 
     void OnEnable()
@@ -30,6 +34,21 @@ public class CameraController : MonoBehaviour
         controls.Camera.LMB.performed += OnLMB;
         controls.Camera.MMB.performed += ctx => { MMB = true; };
         controls.Camera.MMB.canceled += ctx => { MMB = false; };
+
+        controls.Camera.Scroll.performed += ctx => 
+        { 
+            float target = Mathf.Clamp(distance + (ctx.ReadValue<float>()) / -120f, 2, 6);
+            distance = Mathf.Lerp(distance, target, 0.5f); 
+        };
+
+        controls.Camera.F.performed += ctx =>
+        {
+            if (currentState == CameraState.Follow)
+            {
+                currentState = CameraState.Free;
+                target = null;
+            }
+        };
     }
 
     /// <summary>
@@ -47,6 +66,7 @@ public class CameraController : MonoBehaviour
             {
                 target = hit.transform;
                 currentState = CameraState.Follow;
+                currentOffset = (3f * Vector3.back);
             }
         }
     }
@@ -59,20 +79,35 @@ public class CameraController : MonoBehaviour
         //if there is a current target
         if (target != null)
         {
-            transform.position = Vector3.Lerp(transform.position, target.position + currentOffset, 0.5f);
-            transform.LookAt(target);
-
             //if the middle mouse button is being held
             if (MMB)
             {
                 Vector2 mouse = Mouse.current.position.ReadValue();
                 Vector2 offset = new Vector2(Screen.width / 2, Screen.height / 2);
                 mouse = (mouse - offset) * Time.deltaTime * sensitivity;
-                Quaternion turnX = Quaternion.AngleAxis(mouse.x, Vector3.up);
-                Quaternion turnY = Quaternion.AngleAxis(mouse.y, transform.right);
-                currentOffset = turnX * turnY * currentOffset;
+
+                //set the mouse rotation
+                turnXY.x += mouse.x;
+                turnXY.y += mouse.y;
+                turnXY.y = Mathf.Clamp(turnXY.y, -10f, 80f);
+
+                //set the offset vector
+                
+
+                //Quaternion turnX = Quaternion.AngleAxis(mouse.x, Vector3.up);
+                //Quaternion turnY = Quaternion.AngleAxis(mouse.y, transform.right);
+                //currentOffset = turnX * turnY * currentOffset;
             }
+
+            currentOffset = Quaternion.Euler(turnXY.y, turnXY.x, 0) * (distance * Vector3.back);
+            transform.position = Vector3.Lerp(transform.position, target.position + currentOffset, 0.5f);
+            transform.LookAt(target);
         }     
+    }
+
+    void ClampRotation()
+    {
+       
     }
 
     void OnDisable()

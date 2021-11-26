@@ -17,12 +17,13 @@ public class CameraController : MonoBehaviour
     //##camera state
     public CameraState currentState;
 
-    float sensitivity = 0.6f;
+    float sensitivity = 0.25f;
     float distance = 3f;
     
     bool MMB = false;
 
     Vector2 turnXY = new Vector2(0, 0);
+    Vector2 movDir = new Vector2(0, 0);
 
 
     void OnEnable()
@@ -41,12 +42,17 @@ public class CameraController : MonoBehaviour
             distance = Mathf.Lerp(distance, target, 0.5f); 
         };
 
+        controls.Camera.WASD.performed += ctx => { movDir = ctx.ReadValue<Vector2>().normalized; };
+        controls.Camera.WASD.canceled += ctx => { movDir = Vector2.zero; };
+
         controls.Camera.F.performed += ctx =>
         {
             if (currentState == CameraState.Follow)
             {
+                Vector3 f = transform.forward;
                 currentState = CameraState.Free;
                 target = null;
+                transform.rotation = Quaternion.LookRotation(f, transform.up);
             }
         };
     }
@@ -76,8 +82,13 @@ public class CameraController : MonoBehaviour
     /// </summary>
     void Update()
     {
+        HandleMotion();
+    }
+
+    void HandleMotion()
+    {
         //if there is a current target
-        if (target != null)
+        if (currentState == CameraState.Follow)
         {
             //if the middle mouse button is being held
             if (MMB)
@@ -91,23 +102,36 @@ public class CameraController : MonoBehaviour
                 turnXY.y += mouse.y;
                 turnXY.y = Mathf.Clamp(turnXY.y, -10f, 80f);
 
-                //set the offset vector
-                
-
-                //Quaternion turnX = Quaternion.AngleAxis(mouse.x, Vector3.up);
-                //Quaternion turnY = Quaternion.AngleAxis(mouse.y, transform.right);
-                //currentOffset = turnX * turnY * currentOffset;
             }
 
+            //set the offset vector 
             currentOffset = Quaternion.Euler(turnXY.y, turnXY.x, 0) * (distance * Vector3.back);
             transform.position = Vector3.Lerp(transform.position, target.position + currentOffset, 0.5f);
             transform.LookAt(target);
-        }     
-    }
+        }
 
-    void ClampRotation()
-    {
-       
+        else
+        {
+            if (MMB)
+            {
+                Vector2 mouse = Mouse.current.position.ReadValue();
+                Vector2 offset = new Vector2(Screen.width / 2, Screen.height / 2);
+                mouse = (mouse - offset) * Time.deltaTime * sensitivity;
+
+                //set the mouse rotation
+                turnXY.x += mouse.x;
+                turnXY.y -= mouse.y;
+                turnXY.y = Mathf.Clamp(turnXY.y, -70f, 70f);             
+            }
+
+            Vector3 pos = (transform.forward * movDir.y + transform.right * movDir.x) * 0.1f ;
+            pos += transform.position;
+
+            //set the camera rotation
+            Quaternion rot = Quaternion.Euler(turnXY.y, turnXY.x, 0);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rot, 0.4f);
+            transform.position = Vector3.Lerp(transform.position, pos, 0.3f);
+        }
     }
 
     void OnDisable()

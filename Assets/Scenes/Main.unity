@@ -506,9 +506,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waterMaterial: {fileID: 2100000, guid: 78f10de647d2d9745a13671e20685688, type: 2}
-  amplitude: 0.73
-  wavelength: 20
-  speed: 2
+  steepness: 0.13
+  wavelength: 10.1
   strength: 9.8
 --- !u!23 &748952886
 MeshRenderer:

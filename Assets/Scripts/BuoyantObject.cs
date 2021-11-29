@@ -54,20 +54,6 @@ public class BuoyantObject : MonoBehaviour
                                       vt, ForceMode.Acceleration);
             //apply gravity
             rb.AddForceAtPosition(gravity, vt, ForceMode.Acceleration);
-
-
-            /* SINE WAVES */            
-            /*
-            float d = vt.y - WaveGenerator.Instance.SampleWaveHeight(vt.x);
-            //if immersed, apply upward force
-            if (d < 0f)
-                rb.AddForceAtPosition(-d * WaveGenerator.Instance.SampleNormal(vt.x) * 
-                                      WaveGenerator.Instance.strength,
-                                      vt, ForceMode.Acceleration);
-
-            //apply gravity
-            rb.AddForceAtPosition(gravity, vt, ForceMode.Acceleration);
-            */
         }
     }
 }

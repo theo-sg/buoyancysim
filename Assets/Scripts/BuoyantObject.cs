@@ -46,12 +46,17 @@ public class BuoyantObject : MonoBehaviour
             Vector3 vt = transform.TransformPoint(vertex);
 
             /* GERSTNER WAVES */
+            Vector4 g = WaveGenerator.Instance.SampleGerstnerWave(vt.x, vt.z);
+            float d = vt.y - g.w;
 
-            float d = vt.y - WaveGenerator.Instance.Sample2DGerstnerHeight(vt.x, vt.z);
             if(d < 0f)
-                rb.AddForceAtPosition(-d * WaveGenerator.Instance.Sample2DGerstnerNormal(vt.x, vt.z) *
-                                      WaveGenerator.Instance.strength,
-                                      vt, ForceMode.Acceleration);
+            {
+                rb.AddForceAtPosition(-d * (Vector3)g *
+                                     WaveGenerator.Instance.strength,
+                                     vt, ForceMode.Acceleration);
+            }
+
+               
             //apply gravity
             rb.AddForceAtPosition(gravity, vt, ForceMode.Acceleration);
         }

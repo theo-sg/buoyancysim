@@ -506,8 +506,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waterMaterial: {fileID: 2100000, guid: 78f10de647d2d9745a13671e20685688, type: 2}
-  steepness: 0.13
+  steepness: 0.3
   wavelength: 10.1
+  angle: 0
   strength: 9.8
 --- !u!23 &748952886
 MeshRenderer:
@@ -592,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &773557735
 MonoBehaviour:
   m_ObjectHideFlags: 0

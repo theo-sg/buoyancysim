@@ -47,9 +47,9 @@ public class BuoyantObject : MonoBehaviour
 
             /* GERSTNER WAVES */
 
-            float d = vt.y - WaveGenerator.Instance.SampleGerstnerHeight(vt.x);
+            float d = vt.y - WaveGenerator.Instance.Sample2DGerstnerHeight(vt.x, vt.z);
             if(d < 0f)
-                rb.AddForceAtPosition(-d * WaveGenerator.Instance.SampleGerstnerNormal(vt.x) *
+                rb.AddForceAtPosition(-d * WaveGenerator.Instance.Sample2DGerstnerNormal(vt.x, vt.z) *
                                       WaveGenerator.Instance.strength,
                                       vt, ForceMode.Acceleration);
             //apply gravity

@@ -9,6 +9,7 @@ Shader "Custom/WaterShader"
 
         _Steepness ("Steepness", Range(0,1)) = 0.5
         _Wavelength ("Wavelength", Range(1,20)) = 5
+        _Direction ("Direction (2D)", Vector) = (1, 0, 0, 0)
     }
     SubShader
     {
@@ -35,6 +36,7 @@ Shader "Custom/WaterShader"
 
         //water parameters
         float _Steepness, _Wavelength;
+        float2 _Direction;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -51,10 +53,12 @@ Shader "Custom/WaterShader"
             //wave number
             float k = 2 * UNITY_PI / _Wavelength;
             float c = sqrt(9.8 / k);
-            float j = k * (v.x - c * _Time.y);
+            float2 d = normalize(_Direction);
+            float j = k * (dot(d, v.xz) - c * _Time.y);
             float a = _Steepness / k;
-            v.x += a * cos(j);
+            v.x += d.x * (a * cos(j));
             v.y = a * sin(j);
+            v.z += d.y * (a * cos(j));
 
             //tangent = (dx, dy, dz)
             float3 tangent = normalize(float3(1 - _Steepness * sin(j), _Steepness * cos(j), 0));

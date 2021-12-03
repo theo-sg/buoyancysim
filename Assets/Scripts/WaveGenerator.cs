@@ -21,6 +21,8 @@ public class WaveGenerator : MonoBehaviour
     //### wave equation parameters with default values;
     [Range(0f, 1f)] public float steepness = 0.5f;
     [Range(1f, 20f)] public float wavelength = 5f;
+    [Range(0f, 360f)] public float angle = 0f;
+    Vector2 d;
 
     //### simulation parameters
     [Range(0.1f, 15f)] public float strength = 9.81f;
@@ -36,30 +38,67 @@ public class WaveGenerator : MonoBehaviour
         {
             waterMaterial.SetFloat("_Steepness", steepness);
             waterMaterial.SetFloat("_Wavelength", wavelength);
+            float theta = angle * Mathf.Deg2Rad;
+            d = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta)).normalized;
+            Vector4 vec = new Vector4(d.x, d.y, 0, 0);
+            waterMaterial.SetVector("_Direction", vec);
         }
     }
 
-   
-    public float SampleGerstnerHeight(float x)
+    public float Sample2DGerstnerHeight(float x, float z)
     {
-        /* GERSTNER WAVE IMPLEMENTATION */
-        //k, the wavenumber
+        //k, the wave number
         float k = 2 * Mathf.PI / wavelength;
+        //c, the wave speed
         float c = Mathf.Sqrt(9.8f / k);
-
-        //j = k(x - ct)
-        float j = k * (x - c * Time.time);
-
+        //a = s / k
         float a = steepness / k;
+        Vector2 v = new Vector2(x, z);
 
-        //round 1
-        float x1 = x + a * Mathf.Cos(j);
-        float x2 = 2 * x - x1;
+        //j = k( D.(x, z) - ct)
+        float j = k * (Vector2.Dot(d, v) - c * Time.time);
 
-        float j2 = k * (x2 - c * Time.time);
-        float y3 = a * Mathf.Sin(j2);
 
-        return y3;
+        //Newton-Raphson 
+        v.x += d.x * a * Mathf.Cos(j);
+        v.y += d.y * a * Mathf.Cos(j);
+        j = k * (Vector2.Dot(d, v) - c * Time.time);
+
+        //initial output
+        return a * Mathf.Sin(j);
+
+    }
+
+    public Vector3 Sample2DGerstnerNormal(float x, float z)
+    {
+        //k, the wave number
+        float k = 2 * Mathf.PI / wavelength;
+        //c, the wave speed
+        float c = Mathf.Sqrt(9.8f / k);
+        //a = s / k
+        float a = steepness / k;
+        Vector2 v = new Vector2(x, z);
+
+        //j = k( D.(x, z) - ct)
+        float j = k * (Vector2.Dot(d, v) - c * Time.time);
+
+        //Newton-Raphson 
+        v.x += d.x * a * Mathf.Cos(j);
+        v.y += d.y * a * Mathf.Cos(j);
+        j = k * (Vector2.Dot(d, v) - c * Time.time);
+
+
+        //tangent
+        Vector3 tangent = new Vector3(1 - (d.x * d.x * steepness * Mathf.Sin(j)),
+                                      d.x * steepness * Mathf.Cos(j),
+                                      -d.x * d.y * steepness * Mathf.Sin(j));
+        //binormal
+        Vector3 binormal = new Vector3(-d.x * d.y * steepness * Mathf.Sin(j),
+                                       d.y * steepness * Mathf.Cos(j),
+                                       1 - (d.y * d.y * steepness * Mathf.Sin(j)));
+        //normal
+        return Vector3.Cross(binormal, tangent).normalized;
+
     }
 
     public Vector3 SampleGerstnerNormal(float x)

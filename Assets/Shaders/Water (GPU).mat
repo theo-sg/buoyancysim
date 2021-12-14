@@ -74,7 +74,7 @@ Material:
     - _SrcBlend: 1
     - _Steepness: 0.3
     - _UVSec: 0
-    - _Wavelength: 10.1
+    - _Wavelength: 12.9
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0, g: 0.55049324, b: 1, a: 0.6313726}

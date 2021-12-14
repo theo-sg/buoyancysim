@@ -22,10 +22,12 @@ public class WaveGenerator : MonoBehaviour
     [Range(0f, 1f)] public float steepness = 0.5f;
     [Range(1f, 20f)] public float wavelength = 5f;
     [Range(0f, 360f)] public float angle = 0f;
-    Vector2 d;
 
     //### simulation parameters
     [Range(0.1f, 15f)] public float strength = 9.81f;
+
+    //### direction vector
+    Vector2 d;
 
     void OnEnable()
     {
@@ -67,9 +69,8 @@ public class WaveGenerator : MonoBehaviour
         //2 Newton-Raphson iterations 
         for (int i = 0; i < 2; i++)
         {
-            //something is not right here
-            v.x += d.x * a * Mathf.Cos(j);
-            v.y += d.y * a * Mathf.Cos(j);
+            v.x -= d.x * steepness * Mathf.Cos(j);
+            v.y -= d.y * steepness * Mathf.Cos(j);
             j = k * (Vector2.Dot(d, v) - c * Time.time);
         }   
 

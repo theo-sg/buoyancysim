@@ -262,8 +262,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348454077}
   serializedVersion: 2
-  m_Mass: 2
-  m_Drag: 5
+  m_Mass: 1
+  m_Drag: 2
   m_AngularDrag: 3
   m_UseGravity: 0
   m_IsKinematic: 0
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waterMaterial: {fileID: 2100000, guid: 78f10de647d2d9745a13671e20685688, type: 2}
   steepness: 0.3
-  wavelength: 10.1
+  wavelength: 12.9
   angle: 0
   strength: 9.8
 --- !u!23 &748952886
@@ -593,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &773557735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,9 +614,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773557734}
   serializedVersion: 2
-  m_Mass: 2
-  m_Drag: 5
-  m_AngularDrag: 5
+  m_Mass: 1
+  m_Drag: 2
+  m_AngularDrag: 3
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0

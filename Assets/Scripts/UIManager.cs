@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
         
     }
 
+    //### reference variables
     public GameObject parameterMenu;
     public Slider steepnessSlider;
     public Text steepnessText;
@@ -26,9 +27,12 @@ public class UIManager : MonoBehaviour
     public Slider angleSlider;
     public Text angleText;
 
-
+    /// <summary>
+    /// initialise UI elements
+    /// </summary>
     void OnEnable()
     {
+        //set slider values and round values for text
         parameterMenu.SetActive(false);
         steepnessSlider.value = WaveGenerator.Instance.steepness;
         steepnessText.text = "Steepness : " + Math.Round(steepnessSlider.value, 1).ToString();

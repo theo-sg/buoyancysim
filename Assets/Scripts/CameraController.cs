@@ -6,36 +6,37 @@ using UnityEngine.InputSystem.Interactions;
 
 public class CameraController : MonoBehaviour
 {
-    //## reference variables
+    //### reference variables
     Controls controls;
     Transform target;
 
-    //##camera default offset
-    public Vector3 offset;
+    //### camera offset
+    Vector3 defaultOffset = new Vector3(0, 2, -3);
     Vector3 currentOffset;
 
-    //##camera state
+    //### camera state
     public CameraState currentState;
 
+    //### class variables
     float sensitivity = 0.25f;
     float distance = 3f;
-    
-    bool MMB = false;
-
     Vector2 turnXY = new Vector2(0, 0);
     Vector2 movDir = new Vector2(0, 0);
-
+    bool MMB = false;
 
     void OnEnable()
     {
+        //setup controls and state of camera
         currentState = CameraState.Free;
-        currentOffset = offset;
+        currentOffset = defaultOffset;
         controls = new Controls();
         controls.Enable();
         controls.Camera.LMB.performed += OnLMB;
         controls.Camera.MMB.performed += ctx => { MMB = true; };
         controls.Camera.MMB.canceled += ctx => { MMB = false; };
 
+        //set scroll wheel behaviour
+        //scroll wheel changes distance to targeted object
         controls.Camera.Scroll.performed += ctx => 
         { 
             float target = Mathf.Clamp(distance + (ctx.ReadValue<float>()) / -120f, 2, 6);
@@ -45,6 +46,8 @@ public class CameraController : MonoBehaviour
         controls.Camera.WASD.performed += ctx => { movDir = ctx.ReadValue<Vector2>().normalized; };
         controls.Camera.WASD.canceled += ctx => { movDir = Vector2.zero; };
 
+        //set F button behaviour
+        //releases camera from followed object
         controls.Camera.F.performed += ctx =>
         {
             if (currentState == CameraState.Follow)
@@ -66,6 +69,7 @@ public class CameraController : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()); 
         RaycastHit hit;
 
+        //if clicked object is a buoyant object set it as camera target
         if(Physics.Raycast(ray, out hit, 100f))
         {
             if(hit.transform.gameObject.GetComponent<BuoyantObject>() != null)
@@ -121,7 +125,7 @@ public class CameraController : MonoBehaviour
                 //set the mouse rotation
                 turnXY.x += mouse.x;
                 turnXY.y -= mouse.y;
-                turnXY.y = Mathf.Clamp(turnXY.y, -70f, 70f);             
+                turnXY.y = Mathf.Clamp(turnXY.y, 10f, 70f);             
             }
 
             Vector3 pos = (transform.forward * movDir.y + transform.right * movDir.x) * 0.1f ;

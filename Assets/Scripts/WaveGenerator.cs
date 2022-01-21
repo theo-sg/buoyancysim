@@ -67,7 +67,7 @@ public class WaveGenerator : MonoBehaviour
         float j = k * (Vector2.Dot(d, v) - c * Time.time);
 
         //2 Newton-Raphson iterations 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             v.x -= d.x * steepness * Mathf.Cos(j);
             v.y -= d.y * steepness * Mathf.Cos(j);
@@ -90,6 +90,9 @@ public class WaveGenerator : MonoBehaviour
 
 
     /*
+     * 
+     * OBSOLETE/OLD CODE
+     * 
     public float Sample2DGerstnerHeight(float x, float z)
     {
         //k, the wave number

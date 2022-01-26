@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour
         //scroll wheel changes distance to targeted object
         controls.Camera.Scroll.performed += ctx => 
         { 
-            float target = Mathf.Clamp(distance + (ctx.ReadValue<float>()) / -120f, 2, 6);
+            float target = Mathf.Clamp(distance + (ctx.ReadValue<float>()) / -120f, 2, 12);
             distance = Mathf.Lerp(distance, target, 0.5f); 
         };
 
@@ -104,7 +104,7 @@ public class CameraController : MonoBehaviour
                 //set the mouse rotation
                 turnXY.x += mouse.x;
                 turnXY.y += mouse.y;
-                turnXY.y = Mathf.Clamp(turnXY.y, -10f, 80f);
+                turnXY.y = Mathf.Clamp(turnXY.y, 5f, 80f);
 
             }
 

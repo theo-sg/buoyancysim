@@ -13,13 +13,12 @@ public class UIManager : MonoBehaviour
         if (Instance != null && Instance != this)
             Destroy(this);
         else
-            Instance = this;
-
-        
+            Instance = this;    
     }
 
     //### reference variables
     public GameObject parameterMenu;
+    public GameObject spawnMenu;
     public Slider steepnessSlider;
     public Text steepnessText;
     public Slider wavelengthSlider;
@@ -34,6 +33,7 @@ public class UIManager : MonoBehaviour
     {
         //set slider values and round values for text
         parameterMenu.SetActive(false);
+        spawnMenu.SetActive(false);
         steepnessSlider.value = WaveGenerator.Instance.steepness;
         SetSteepnessText();
         wavelengthSlider.value = WaveGenerator.Instance.wavelength;
@@ -46,6 +46,7 @@ public class UIManager : MonoBehaviour
     public void ToggleMenu()
     {
         parameterMenu.SetActive(!parameterMenu.activeSelf);
+        spawnMenu.SetActive(!spawnMenu.activeSelf);
     }
 
     public void SetSteepness()

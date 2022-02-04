@@ -6,23 +6,31 @@ using UnityEngine.InputSystem.Interactions;
 
 public class CameraController : MonoBehaviour
 {
+    //### singleton
+    public static CameraController Instance;
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
+
     //### reference variables
     Controls controls;
-    Transform target;
+    public Transform target;
 
-    //### camera offset
+    //### parameters with default values
     Vector3 defaultOffset = new Vector3(0, 2, -3);
-    Vector3 currentOffset;
-
-    //### camera state
-    public CameraState currentState;
-
-    //### class variables
     float sensitivity = 0.25f;
+
+    //### states
+    public CameraState currentState;
+    bool MMB = false;
     float distance = 3f;
+    Vector3 currentOffset;
     Vector2 turnXY = new Vector2(0, 0);
     Vector2 movDir = new Vector2(0, 0);
-    bool MMB = false;
 
     void OnEnable()
     {
@@ -48,22 +56,12 @@ public class CameraController : MonoBehaviour
 
         //set F button behaviour
         //releases camera from followed object
-        controls.Camera.F.performed += ctx =>
-        {
-            if (currentState == CameraState.Follow)
-            {
-                Vector3 f = transform.forward;
-                currentState = CameraState.Free;
-                target = null;
-                transform.rotation = Quaternion.LookRotation(f, transform.up);
-            }
-        };
+        controls.Camera.F.performed += ctx => UnlinkCamera();
     }
 
     /// <summary>
     /// method called on left mouse click
     /// </summary>
-    /// <param name="context">the event details</param>
     public void OnLMB(InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue()); 
@@ -77,7 +75,22 @@ public class CameraController : MonoBehaviour
                 target = hit.transform;
                 currentState = CameraState.Follow;
                 currentOffset = (3f * Vector3.back);
+                UIManager.Instance.SetDeleteButton(true);
             }
+        }
+    }
+
+    /// <summary>
+    /// unlinks the camera from the current object
+    /// </summary>
+    public void UnlinkCamera()
+    {
+        if (currentState == CameraState.Follow)
+        {
+            Vector3 f = transform.forward;
+            currentState = CameraState.Free;
+            target = null;
+            transform.rotation = Quaternion.LookRotation(f, transform.up);
         }
     }
 
@@ -89,6 +102,9 @@ public class CameraController : MonoBehaviour
         HandleMotion();
     }
 
+    /// <summary>
+    /// calculates the new position and moves the camera
+    /// </summary>
     void HandleMotion()
     {
         //if there is a current target
@@ -105,7 +121,6 @@ public class CameraController : MonoBehaviour
                 turnXY.x += mouse.x;
                 turnXY.y += mouse.y;
                 turnXY.y = Mathf.Clamp(turnXY.y, 5f, 80f);
-
             }
 
             //set the offset vector 
@@ -116,6 +131,7 @@ public class CameraController : MonoBehaviour
 
         else
         {
+            //if there is no target and middle mouse button is held
             if (MMB)
             {
                 Vector2 mouse = Mouse.current.position.ReadValue();
@@ -125,7 +141,7 @@ public class CameraController : MonoBehaviour
                 //set the mouse rotation
                 turnXY.x += mouse.x;
                 turnXY.y -= mouse.y;
-                turnXY.y = Mathf.Clamp(turnXY.y, 10f, 70f);             
+                turnXY.y = Mathf.Clamp(turnXY.y, -30f, 70f);             
             }
 
             Vector3 pos = (transform.forward * movDir.y + transform.right * movDir.x) * 0.1f ;

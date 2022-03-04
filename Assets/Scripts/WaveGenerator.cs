@@ -18,7 +18,7 @@ public class WaveGenerator : MonoBehaviour
     MeshFilter filter;
     public Material waterMaterial;
 
-    //### parameters with default values;
+    //### parameters with default values
     [Range(0f, 0.7f)]   public float steepness = 0.2f;
     [Range(5f, 50f)]    public float wavelength = 10f;
     [Range(0f, 360f)]   public float angle = 0f;

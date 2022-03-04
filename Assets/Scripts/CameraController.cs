@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour
             distance = Mathf.Lerp(distance, target, 0.5f); 
         };
 
-        controls.Camera.WASD.performed += ctx => { movDir = ctx.ReadValue<Vector2>().normalized; };
+        controls.Camera.WASD.performed += ctx => { movDir = ctx.ReadValue<Vector2>().normalized * 2f; };
         controls.Camera.WASD.canceled += ctx => { movDir = Vector2.zero; };
 
         //set F button behaviour

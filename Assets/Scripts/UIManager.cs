@@ -62,7 +62,7 @@ public class UIManager : MonoBehaviour
     public void SetDeleteButton(bool target)
     {
         //delete button only on if object is being followed
-        if (CameraController.Instance.currentState == CameraState.Follow)
+        if (CameraController.Instance.currentState == CameraState.Follow && spawnMenu.activeSelf)
             deleteButton.SetActive(target);
         else
             deleteButton.SetActive(false);

@@ -72,12 +72,12 @@ Material:
     - _SpecularHighlights: 1
     - _Speed: -10
     - _SrcBlend: 1
-    - _Steepness: 0.7
+    - _Steepness: 0.4
     - _UVSec: 0
     - _Wavelength: 50
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0, g: 0.55049324, b: 1, a: 0.6313726}
-    - _Direction: {r: 1, g: 0, b: 0, a: 0}
+    - _Direction: {r: 0.38215825, g: 0.9240969, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

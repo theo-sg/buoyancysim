@@ -102,7 +102,7 @@ public class UIManager : MonoBehaviour
     {
         steepnessText.text = String.Format(
                              "Steepness: {0}%",
-                             (Math.Round(steepnessSlider.value, 2) * 100).ToString());
+                             (Math.Round(steepnessSlider.value / 0.4f, 2) * 100).ToString());
     }
 
     /// <summary>

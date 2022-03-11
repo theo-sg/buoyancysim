@@ -19,7 +19,7 @@ public class WaveGenerator : MonoBehaviour
     public Material waterMaterial;
 
     //### parameters with default values
-    [Range(0f, 0.7f)]   public float steepness = 0.2f;
+    [Range(0f, 0.4f)]   public float steepness = 0.1f;
     [Range(5f, 50f)]    public float wavelength = 10f;
     [Range(0f, 360f)]   public float angle = 0f;
     [Range(0.1f, 15f)]  public float strength = 9.81f;

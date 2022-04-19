@@ -20,6 +20,10 @@ public class UIManager : MonoBehaviour
     public GameObject parameterMenu;
     public GameObject spawnMenu;
     public GameObject deleteButton;
+    public GameObject instructionButton;
+    public GameObject instructionMenu;
+    public Text counterText;
+
     public Slider steepnessSlider;
     public Text steepnessText;
     public Slider wavelengthSlider;
@@ -33,6 +37,9 @@ public class UIManager : MonoBehaviour
         parameterMenu.SetActive(false);
         spawnMenu.SetActive(false);
         deleteButton.SetActive(false);
+        instructionButton.SetActive(false);
+        instructionMenu.SetActive(false);
+
         steepnessSlider.value = WaveGenerator.Instance.steepness;
         SetSteepnessText();
         wavelengthSlider.value = WaveGenerator.Instance.wavelength;
@@ -51,7 +58,9 @@ public class UIManager : MonoBehaviour
         bool targetState = !parameterMenu.activeSelf;
         parameterMenu.SetActive(targetState);
         spawnMenu.SetActive(targetState);
-        SetDeleteButton(targetState);       
+        SetDeleteButton(targetState);
+        instructionButton.SetActive(targetState);
+        instructionMenu.SetActive(false);
     }
 
 
@@ -66,6 +75,28 @@ public class UIManager : MonoBehaviour
             deleteButton.SetActive(target);
         else
             deleteButton.SetActive(false);
+    }
+
+    /// <summary>
+    /// called when the instruction button is pressed
+    /// </summary>
+    public void InstructionButtonPressed()
+    {
+        //if the instructions are closed
+        if (!instructionMenu.activeSelf)
+        {
+            spawnMenu.SetActive(false);
+            parameterMenu.SetActive(false);
+            instructionMenu.SetActive(true);
+            SetDeleteButton(false);
+        }
+        else
+        {           
+            spawnMenu.SetActive(true);
+            parameterMenu.SetActive(true);
+            instructionMenu.SetActive(false);
+            SetDeleteButton(true);
+        }
     }
 
     /// <summary>

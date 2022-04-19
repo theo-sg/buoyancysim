@@ -13,10 +13,16 @@ public class SpawnManager : MonoBehaviour
             Destroy(this);
         else
             Instance = this;
+
+        objectsInScene = Object.FindObjectsOfType<BuoyantObject>().Length;
+        uiManager = GetComponent<UIManager>();
+        UpdateCounterText();
     }
 
     //list of spawnable objects
     public GameObject[] spawns = new GameObject[2];
+    [SerializeField]   private int objectsInScene;
+    public UIManager uiManager;
 
     /// <summary>
     /// spawns an object from the array
@@ -24,7 +30,12 @@ public class SpawnManager : MonoBehaviour
     /// <param name="n">the index of the item to spawn</param>
     public void SpawnObject(int n)
     {
-        GameObject go = Instantiate(spawns[n], Vector3.up * 3, Quaternion.identity);
+        if(objectsInScene < 20)
+        {
+            GameObject go = Instantiate(spawns[n], Vector3.up * 3, Quaternion.identity);
+            objectsInScene++;
+            UpdateCounterText();
+        }
     }
 
     /// <summary>
@@ -36,5 +47,12 @@ public class SpawnManager : MonoBehaviour
         CameraController.Instance.UnlinkCamera();
         Destroy(t.gameObject);
         UIManager.Instance.SetDeleteButton(false);
+        objectsInScene--;
+        UpdateCounterText();
+    }
+
+    public void UpdateCounterText()
+    {
+        uiManager.counterText.text = objectsInScene.ToString() + "/20 objects";
     }
 }
